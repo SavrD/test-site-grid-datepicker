@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Monblan Project — Grid/List Layout</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+  </head>
+  <body>
+    <div class="corner-bg"></div>
+    <div class="corner-bg-bottom"></div>
+    <div class="header-bg"></div>
+
+    <div class="container">
+      <header class="top">
+        <div class="logo">
+          <img src="./img/logo.png" alt="" />
+        </div>
+        <div class="account">
+          <div class="name">
+            <div>monblanproject</div>
+            <div
+              style="
+                background: #fff;
+                border: 1px solid #3d8eda;
+                padding: 6px 10px;
+                border-radius: 8px;
+                font-size: 13px;
+                color: #3d8eda;
+              "
+            >
+              Start on 17-02-2016
+            </div>
+          </div>
+          <div class="meta">
+            <div><span class="stat">870</span> posts</div>
+            <div><span class="stat">11,787</span> followers</div>
+            <div><span class="stat">112</span> following</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="controls">
+        <div style="font-weight: 600; color: #4b5563">Date</div>
+        <div class="date-filter">
+          <input type="text" readonly placeholder="from" />
+          <div style="width: 1px; background: #ececec; height: 28px"></div>
+          <input type="text" readonly placeholder="to" />
+        </div>
+
+        <div class="view-toggle">
+          <button class="btn active" id="listViewBtn">
+            <img src="./img/list.png" alt="" />
+          </button>
+          <button class="btn" id="gridViewBtn">
+            <img src="./img/grid.png" alt="" />
+          </button>
+        </div>
+      </div>
+
+      <main class="list" id="postContainer"></main>
+
+      <div class="load-wrap">
+        <button class="load-more" id="loadMoreBtn">LOAD MORE</button>
+      </div>
+    </div>
+
+    <script>
+      const postContainer = document.getElementById("postContainer");
+      const listBtn = document.getElementById("listViewBtn");
+      const gridBtn = document.getElementById("gridViewBtn");
+
+      const images = [
+        "./img/img1.png",
+        "./img/img2.png",
+        "./img/img3.png",
+        "./img/img4.png",
+        "./img/img5.png",
+        "./img/img6.png",
+        "./img/img7.png",
+        "./img/img8.png",
+      ];
+
+      function createItem(i) {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+      <div class="thumb"><img src="${images[i % images.length]}" alt="image ${
+          i + 1
+        }"></div>
+      <div class="center">
+        <div class="left-col">
+          <div class="title">Today</div>
+          <div class="icons">❤ 128 💬 31</div>
+        </div>
+        <div class="date-col">
+          <div class="date-big">9-08-2016</div>
+          ❤ 67 💬 22
+        </div>
+      </div>
+      <div class="right-col">
+        <div class="type">Image upload</div>
+        11-04-2016
+      </div>
+      <!-- Для grid-вида -->
+      <div class="info" style="display:none;">
+        <div class="line1">Today</div>
+        <div class="line2">9-08-2016</div>
+        <div class="stats">
+          <span>❤ 128</span><span>💬 31</span><span>❤ 67</span><span>💬 22</span>
+        </div>
+        <div class="footer">
+          <span>Image upload</span><span>11-04-2016</span>
+        </div>
+      </div>
+    `;
+        return div;
+      }
+
+      function renderPosts(n = 8) {
+        for (let i = 0; i < n; i++) {
+          postContainer.appendChild(createItem(i));
+        }
+      }
+
+      renderPosts(8);
+      document
+        .getElementById("loadMoreBtn")
+        .addEventListener("click", () => renderPosts(4));
+
+      gridBtn.addEventListener("click", () => {
+        postContainer.classList.add("grid");
+        postContainer.classList.remove("list");
+        gridBtn.classList.add("active");
+        listBtn.classList.remove("active");
+
+        // показываем блок info для grid
+        document
+          .querySelectorAll(".item .info")
+          .forEach((el) => (el.style.display = "flex"));
+        document
+          .querySelectorAll(".item .center, .item .right-col")
+          .forEach((el) => (el.style.display = "none"));
+      });
+
+      listBtn.addEventListener("click", () => {
+        postContainer.classList.add("list");
+        postContainer.classList.remove("grid");
+        listBtn.classList.add("active");
+        gridBtn.classList.remove("active");
+
+        // скрываем блок info для list
+        document
+          .querySelectorAll(".item .info")
+          .forEach((el) => (el.style.display = "none"));
+        document
+          .querySelectorAll(".item .center, .item .right-col")
+          .forEach((el) => (el.style.display = ""));
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      flatpickr("input[placeholder='from']", { dateFormat: "d-m-Y" });
+      flatpickr("input[placeholder='to']", { dateFormat: "d-m-Y" });
+    </script>
+  </body>
+</html>
